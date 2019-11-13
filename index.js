@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
 
+dotenv.config();
 // Body Parser for req/res
 const bodyParser = require('body-parser');
 
@@ -13,23 +14,22 @@ const cors = require('cors');
 
 // Helmet for request security.
 const helmet = require('helmet');
-
 const config = require('./config');
+
+
 // Bunyan logger
 const logger = require('./logger')();
 
 // express init
 const app = express();
 
-// dotenv init
-dotenv.config();
 // CORS
 app.use(cors());
 
 // Body Parser config
 app.use(bodyParser.urlencoded({
   parameterLimit: 10,
-  limit: '1mb',
+  limit: '200mb',
   extended: false,
 }));
 
@@ -42,9 +42,10 @@ app.disable('x-powered-by');
 app.use(helmet.xssFilter());
 app.use(helmet.frameguard());
 
-
+// Configure databases here.
+const mongo = require('./mongo');
 /**
- * Authentication and Authorization REST APIs
+ * Aplha  REST APIs
  */
 
 app.get('/', (req, res, next) => {

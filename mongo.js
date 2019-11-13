@@ -22,6 +22,7 @@ mongo.connect(
     useCreateIndex: true,
     useNewUrlParser: true,
     useFindAndModify: false,
+    useUnifiedTopology: true,
   },
   (err) => {
     if (err) {
