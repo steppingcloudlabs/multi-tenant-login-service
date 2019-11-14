@@ -1,2 +1,0 @@
-NODE_ENV='development'
-MONGO_URI='mongodb+srv://developer:zn4QRR3rIa0SqJ6L@dev-n6nb4.mongodb.net/researchkernel?retryWrites=true&w=majority'

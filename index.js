@@ -55,6 +55,15 @@ app.get('/', (req, res, next) => {
   });
 });
 
+
+app.use(
+  '/api/v1',
+  require('./routes/routes')({
+    logger,
+    db: mongo
+  }),
+);
+
 /**
  * Server
  */
