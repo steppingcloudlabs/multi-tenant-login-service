@@ -1,19 +1,17 @@
 const express = require('express');
 
 const router = express.Router();
-const employeeController = require('../controller/controller.Employee')();
+const signupController = require('../controller/controller.signup')();
 
 module.exports = ({
-   logger,
-   db
+  logger,
+  db,
 }) => {
-   router
-      .route('/employee/signup')
-      .post((req, res, next) => {
-         return employeeController.signupEmployee(req, res, next, {
-            logger,
-            db
-         });
-      })
-   return router;
-}
+  router
+    .route('/signup')
+    .post((req, res, next) => signupController.signup(req, res, next, {
+      logger,
+      db,
+    }));
+  return router;
+};
