@@ -18,7 +18,6 @@ module.exports = () => {
         const validUserCheckResponse = await Masterdata.findOne({
           user_id
         });
-        console.log(validUserCheckResponse);
 
         if (validUserCheckResponse) {
           // Check if email used is already taken
