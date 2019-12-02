@@ -3,6 +3,7 @@ const logger = require('../logger')();
 
 module.exports = () => {
     const multi_tenant_db_connector = (db_host, db_port, db_name, db_username, db_password, logger) => new Promise(async(resolve, reject) => {
+        
         try {
             const uri = `mongodb://${db_username}:${db_password}@${db_host}:${db_port}/${db_name}`;
             // console.log(uri)
