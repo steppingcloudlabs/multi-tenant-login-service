@@ -28,9 +28,9 @@ app.use(cors());
 
 // Body Parser config
 app.use(bodyParser.urlencoded({
-  parameterLimit: 10,
-  limit: '200mb',
-  extended: false,
+    parameterLimit: 10,
+    limit: '200mb',
+    extended: false,
 }));
 
 // Json Parser config
@@ -43,30 +43,29 @@ app.use(helmet.xssFilter());
 app.use(helmet.frameguard());
 
 // Configure databases here.
-const mongo = require('./mongo');
+// const mongo = require('./mongo');
 /**
  * Aplha  REST APIs
  */
 
 app.get('/', (req, res, next) => {
-  res.send({
-    code: 200,
-    message: 'Faad chal rha hai.',
-  });
+    res.send({
+        code: 200,
+        message: 'Faad chal rha hai.',
+    });
 });
 
 
 app.use(
-  '/api/v1',
-  require('./routes/routes')({
-    logger,
-    db: mongo
-  }),
+    '/api/v1',
+    require('./routes/routes')({
+        logger
+    }),
 );
 
 /**
  * Server
  */
 app.listen(config.port, () => {
-  console.log(`Server listening on port: ${config.port}`);
+    console.log(`Server listening on port: ${config.port}`);
 });

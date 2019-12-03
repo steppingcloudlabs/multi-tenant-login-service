@@ -29,7 +29,10 @@ module.exports = () => {
                     user_id: { type: "string" },
                     email: { type: "string", format: "email" },
                     password: { type: "string" },
-                    tenantid: { type: "string" }
+                    tenantid: { type: "string" },
+                    company_id: { type: "string" },
+                    master_username: { type: "string" },
+                    master_password: { type: "string" }
                 },
                 required: ["user_id", "email", "password"]
             };

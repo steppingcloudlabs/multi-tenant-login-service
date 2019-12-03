@@ -5,7 +5,7 @@ const { Schema } = mongoose;
 const loginSchema = new Schema({
     user_id: {
         type: String,
-        unique: true,
+        unique: "true",
         required: true
     },
     email: {

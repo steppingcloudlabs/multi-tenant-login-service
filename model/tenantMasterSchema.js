@@ -1,5 +1,5 @@
-// const mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-// const { Schema } = mongoose;
-// const Masterdata = mongoose.model('Masterdata', new Schema({}), 'masterdata');
-// module.exports = Masterdata;
+const { Schema } = mongoose;
+const Masterdata = mongoose.model('Masterdata', new Schema({}), 'masterdata');
+module.exports = Masterdata;
