@@ -56,6 +56,11 @@ module.exports = () => {
                         status: "400",
                         message: `${payload.email} already exists.`
                     });
+                } else if (response == "FID") {
+                    res.status(200).send({
+                        status: "400",
+                        message: ` user: ${payload.user_id} already exists.`
+                    });
                 } else {
                     res.status(200).send({
                         status: "200 OK",

@@ -29,10 +29,17 @@ module.exports = () => {
                 if (validUserCheckResponse) {
                     // Check if email used is already taken
                     const emailDuplicacyCheckResponse = await User.findOne({ email });
+
+                    // Check if user_id used is already taken
+                    const user_idDuplicacyCheckResponse = await User.findOne({ user_id });
+                    
                     if (emailDuplicacyCheckResponse) {
                         tenant_db.disconnect()
                         resolve("FE");
 
+                    } else if(user_idDuplicacyCheckResponse) {
+                        tenant_db.disconnect()
+                        resolve("FID");
                     } else {
                         // Declare a constant response_user that will be the new user to be added and sent as a response
                         const responseUser = new User({
