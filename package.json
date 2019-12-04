@@ -21,6 +21,7 @@
     "homepage": "https://github.com/steppingcloudlabs/multi-tenant-login-service#readme",
     "dependencies": {
         "aws-sdk": "^2.553.0",
+        "bcrypt": "^3.0.7",
         "body-parser": "^1.19.0",
         "bunyan": "^1.8.12",
         "chai": "^4.2.0",

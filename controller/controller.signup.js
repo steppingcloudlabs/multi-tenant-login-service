@@ -1,7 +1,7 @@
-/* eslint-disable no-plusplus */
-/* eslint-disable no-await-in-loop */
-const JsonValidator = require("jsonschema").Validator;
-const validatator = new JsonValidator();
+    /* eslint-disable no-plusplus */
+    /* eslint-disable no-await-in-loop */
+    const JsonValidator = require("jsonschema").Validator;
+    const validatator = new JsonValidator();
 
 const signupService = require("../services/services.signup")();
 const tenant = require("../util/index")
@@ -29,12 +29,13 @@ module.exports = () => {
                     user_id: { type: "string" },
                     email: { type: "string", format: "email" },
                     password: { type: "string" },
-                    tenantid: { type: "string" },
+                    user_type: { type: "string"},
+                    subscribed_service: {type: "string"},
                     company_id: { type: "string" },
                     master_username: { type: "string" },
                     master_password: { type: "string" }
                 },
-                required: ["user_id", "email", "password"]
+                required: ["user_id", "email", "password", "subscribed_service", "company_id", "master_username", "master_password" ]
             };
 
             validatator.addSchema(signupUserSchema, "/signupUserSchema");

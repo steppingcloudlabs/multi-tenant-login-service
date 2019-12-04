@@ -1,5 +1,6 @@
 const User = require("../model/loginSchema");
 const Masters = require("../model/tenantMasterSchema")
+const Role = require("../model/role")
 const Tenantutil = require("../util/index")();
 const config = require("../config/index")
 
@@ -16,14 +17,15 @@ module.exports = () => {
      */
 
     const signup = (payload, logger) =>
-        new Promise(async(resolve, reject) => {
+        new Promise(async (resolve, reject) => {
             try {
-                const { name, email, password, company_id, master_password, master_username } = payload;
+                const { email, password, user_type, subscribed_service, company_id, master_password, master_username } = payload;
                 const user_id = parseInt(payload.user_id);
-                // connect with alpha database for getting database credentials.
-                const tenant_db = await Tenantutil.multi_tenant_db_connector(config.db_host, config.db_port, company_id, master_username, master_password, logger);
-                // Check to see if the User with same user_id is present in masterdata
 
+                // connect with tenant database for getting database credentials.
+                const tenant_db = await Tenantutil.multi_tenant_db_connector(config.db_host, config.db_port, company_id, master_username, master_password, logger);
+
+                // Check to see if the User with same user_id is present in masterdata
                 const validUserCheckResponse = await Masters.findOne({ user_id });
 
                 if (validUserCheckResponse) {
@@ -32,28 +34,57 @@ module.exports = () => {
 
                     // Check if user_id used is already taken
                     const user_idDuplicacyCheckResponse = await User.findOne({ user_id });
-                    
+
                     if (emailDuplicacyCheckResponse) {
                         tenant_db.disconnect()
                         resolve("FE");
 
-                    } else if(user_idDuplicacyCheckResponse) {
+                    } else if (user_idDuplicacyCheckResponse) {
                         tenant_db.disconnect()
                         resolve("FID");
                     } else {
-                        // Declare a constant response_user that will be the new user to be added and sent as a response
-                        const responseUser = new User({
-                            name,
-                            user_id,
-                            email,
-                            password
-                        });
-                        await responseUser.save();
-                        tenant_db.disconnect()
-                        resolve("UC");
-                        logger.info(
-                            "Successfully Created User! "
-                        );
+
+                        
+
+                        if (user_type == "admin") {
+                            const role = await Role.findOne({ role: "king" }, { _id: 1 })
+                            // Declare a constant response_user that will be the new user to be added and sent as a response
+                            const responseUser = new User({
+                                user_id,
+                                email,
+                                password,
+                                user_type,
+                                subscribed_service,
+                                role,
+                            });
+
+                            await responseUser.save();
+                            tenant_db.disconnect()
+                            resolve("UC");
+                            logger.info(
+                                "Successfully Created User! "
+                            );
+                        } else {
+                            const role = await Role.findOne({ role: "subject" }, { _id: 1 })
+                            // Declare a constant response_user that will be the new user to be added and sent as a response
+                            const responseUser = new User({
+                                user_id,
+                                email,
+                                password,
+                                user_type,
+                                subscribed_service,
+                                role,
+                            });
+
+                            await responseUser.save();
+                            tenant_db.disconnect()
+                            resolve("UC");
+                            logger.info(
+                                "Successfully Created User! "
+                            );
+                        }
+
+
                     }
 
                 } else {
