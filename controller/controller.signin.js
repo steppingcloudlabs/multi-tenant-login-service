@@ -29,8 +29,11 @@
                     
                     email: { type: "string", format: "email" },
                     password: { type: "string" },
+                    company_id: { type: "string" },
+                    master_username: { type: "string" },
+                    master_password: { type: "string"}
                 },
-                required: ["email", "password"]
+                required: ["email", "password", "company_id", "master_username", "master_password"  ]
             };
 
             validatator.addSchema(signinUserSchema, "/signinUserSchema");
@@ -41,19 +44,18 @@
 
             if (validatorResponse) {
                const response= await signinService.signin(payload,logger,db)
-                console.log(response)
                     if(response == 'success') {
                     res.status(200).send({
                         status: '200 ok',
-                        result: "Logged In"
+                        result: `${payload.email} signed in`
                     })
                 } else {
                     res.status(200).send({
                         status: '400',
-                        result: 'Shit dont work'
+                        result: 'Invalid username or password'
                 })
                 }
-            } else {
+            } else if(response == "AE") {
                 res.status(200).send({
                     status: '400',
                     result: "Not a valid JSON, checkout help for json schema ",
