@@ -44,10 +44,12 @@
 
             if (validatorResponse) {
                const response= await signinService.signin(payload,logger,db)
-                    if(response == 'success') {
+               
+                    if(response.token) {
                     res.status(200).send({
                         status: '200 ok',
-                        result: `${payload.email} signed in`
+                        // result: `${payload.email} signed in`
+                        result: response
                     })
                 } else {
                     res.status(200).send({
@@ -55,7 +57,7 @@
                         result: 'Invalid username or password'
                 })
                 }
-            } else if(response == "AE") {
+            } else {
                 res.status(200).send({
                     status: '400',
                     result: "Not a valid JSON, checkout help for json schema ",

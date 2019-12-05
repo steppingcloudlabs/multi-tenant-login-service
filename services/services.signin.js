@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-
+const JWT = require('jsonwebtoken');
 const Tenantutil = require("../util/index")();
 const config = require("../config/index")
 const User = require("../model/loginSchema");
@@ -11,44 +11,49 @@ module.exports = () => {
     * @param {String} logger
     * @param {String} db
     */
-    // const signin = (payload, logger,db) => {
-    //     new Promise(async (resolve, reject) => {
-    //        resolve("fadd hia  bhai")
-    //     });
-    // }
 
     const signin = (payload, logger) => new Promise(async (resolve, reject) => {
         try {
-            const {email, password, company_id, master_username, master_password} = payload;
+            const { email, password, company_id, master_username, master_password } = payload;
 
             // connect with tenant database for getting database credentials.
             const tenant_db = await Tenantutil.multi_tenant_db_connector(config.db_host, config.db_port, company_id, master_username, master_password, logger);
-            
+
 
             //Check to see if user is present in the database
-            response = await User.findOne({email});
+            response = await User.findOne({ email });
 
-            if(response) {
+            if (response) {
                 //Check the password of the user
                 const isMatch = await bcrypt.compare(
-                password,
-                response.password
+                    password,
+                    response.password
                 );
-    
-                if(isMatch){
+
+                if (isMatch) {
                     tenant_db.disconnect();
-                    resolve("success")
+                    const token = JWT.sign({
+                        iss: 'steppingcloudforsignin',
+                        sub: response.email,
+                        algorithm: 'HS256',
+                        iat: new Date().getTime(),
+                        exp: new Date().setTime(new Date().getTime() + 15*60*1000),
+                    },
+                        config['jwt_secret_key']
+                    )
+                    resolve({ ...response.toJSON(), token });
                 } else {
                     //Authentication error
                     tenant_db.disconnect();
-                    resolve("AE")
-                } 
+                    resolve("AF")
+                }
             } else {
                 tenant_db.disconnect();
-                resolve("AE")
+                resolve("AF")
             }
 
         } catch (error) {
+            console.log(error)
             reject(error);
         }
     })
