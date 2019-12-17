@@ -2,6 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 const signupController = require('../controller/controller.signup')();
+const adminSignupController = require('../controller/controller.adminSignup')();
 const signinController = require('../controller/controller.signin')();
 const roleController = require('../controller/controller.roles')();
 const getController = require('../controller/controller.getEverything')()
@@ -11,8 +12,15 @@ module.exports = ({
   db,
 }) => {
   router
-    .route('/signup')
+    .route('/user/signup')
     .post((req, res, next) => signupController.signup(req, res, next, {
+      logger,
+      db,
+    }));
+
+    router
+    .route('/admin/signup')
+    .post((req, res, next) => adminSignupController.signup(req, res, next, {
       logger,
       db,
     }));
