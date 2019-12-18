@@ -21,7 +21,7 @@ const loginSchema = new Schema({
     },
     user_type: {
         type: String,
-        enum: ['user', 'admin'],
+        enum: ['user', 'admin', 'hr'],
         default: 'user'
     },
     subscribed_service: [{ type: String, required: true }],
