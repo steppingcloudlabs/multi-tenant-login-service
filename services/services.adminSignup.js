@@ -1,6 +1,7 @@
 const User = require("../model/loginSchema");
 const Masters = require("../model/tenantMasterSchema")
 const Role = require("../model/role")
+const Profile = require("../model/profile")
 const Tenantutil = require("../util/index")();
 const config = require("../config/index")
 
@@ -16,10 +17,11 @@ module.exports = () => {
      * @param {String} db
      */
 
+
     const signup = (payload, logger) =>
         new Promise(async (resolve, reject) => {
             try {
-                const { email, password, user_type, subscribed_service, company_id, master_password, master_username } = payload;
+                const { email, password, first_name, last_name, user_type, subscribed_service, company_id, master_password, master_username } = payload;
                 const user_id = parseInt(payload.user_id);
 
                 // connect with tenant database for getting database credentials.
@@ -39,23 +41,47 @@ module.exports = () => {
                     tenant_db.disconnect()
                     resolve("FID");
                 } else {
-                        const role = await Role.findOne({ role: "king" }, { _id: 1 })
+                        if(user_type == 'admin') {
+                            const role = await Role.findOne({ role: "king" }, { _id: 1 })
                         // Declare a constant response_user that will be the new user to be added and sent as a response
                         const responseUser = new User({
                             user_id,
                             email,
                             password,
-                            user_type: 'admin',
+                            user_type,
                             subscribed_service,
                             role,
                         });
 
                         await responseUser.save();
+                        const userProfile = new Profile({first_name, last_name, user: responseUser._id});
+                        await userProfile.save()
                         tenant_db.disconnect()
                         resolve("UC");
                         logger.info(
-                            "Successfully Created Admin "
+                            `Successfully Created Admin for company: ${company_id}` 
                         );
+                        } else {
+                            const role = await Role.findOne({ role: "subject" }, { _id: 1 })
+                        // Declare a constant response_user that will be the new user to be added and sent as a response
+                        const responseUser = new User({
+                            user_id,
+                            email,
+                            password,
+                            user_type,
+                            subscribed_service,
+                            role,
+                        });
+
+                        await responseUser.save();
+                        const userProfile = new Profile({first_name, last_name, user: responseUser._id});
+                        await userProfile.save()
+                        tenant_db.disconnect()
+                        resolve("UC");
+                        logger.info(
+                            `Successfully Created HR for company: ${company_id}` 
+                        );
+                        }
                 }
 
             } catch (error) {

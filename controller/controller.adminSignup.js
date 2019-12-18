@@ -1,7 +1,7 @@
-    /* eslint-disable no-plusplus */
-    /* eslint-disable no-await-in-loop */
-    const JsonValidator = require("jsonschema").Validator;
-    const validatator = new JsonValidator();
+/* eslint-disable no-plusplus */
+/* eslint-disable no-await-in-loop */
+const JsonValidator = require("jsonschema").Validator;
+const validatator = new JsonValidator();
 
 const adminSignupService = require("../services/services.adminSignup")();
 const tenant = require("../util/index")
@@ -14,7 +14,8 @@ module.exports = () => {
      * @param {} param3
      */
 
-    const signup = async(req, res, next, { logger, db }) => {
+
+    const signup = async (req, res, next, { logger, db }) => {
         try {
             const payload = req.body;
             /**
@@ -27,14 +28,17 @@ module.exports = () => {
                 type: "object",
                 properties: {
                     user_id: { type: "string" },
+                    first_name: {type: "string"},
+                    last_name: {type: "string"},
                     email: { type: "string", format: "email" },
                     password: { type: "string" },
-                    subscribed_service: {type: "string"},
+                    user_type: { type: 'string' },
+                    subscribed_service: { type: "string" },
                     company_id: { type: "string" },
                     master_username: { type: "string" },
                     master_password: { type: "string" }
                 },
-                required: ["user_id", "email", "password", "subscribed_service", "company_id", "master_username", "master_password" ]
+                required: ["user_id", "first_name", "last_name", "email", "password", "subscribed_service", "company_id", "master_username", "master_password", 'user_type']
             };
 
             validatator.addSchema(signupUserSchema, "/signupUserSchema");
@@ -70,13 +74,16 @@ module.exports = () => {
                     status: "400",
                     result: "Not a valid JSON, checkout help for json schema ",
                     help: {
-                    user_id: '123456789',
-                    email: 'example@example.com',
-                    password: 'password',
-                    subscribed_service: 'service_1, service_2',
-                    company_id: '987654321',
-                    master_username: 'user_name',
-                    master_password: 'password'
+                        user_id: '123456789',
+                        first_name: 'Mohammed',
+                        last_name: "Modi",
+                        email: 'example@example.com',
+                        password: 'password',
+                        user_type: 'admin',
+                        subscribed_service: 'service_1, service_2',
+                        company_id: '987654321',
+                        master_username: 'user_name',
+                        master_password: 'password'
                     }
                 });
             }

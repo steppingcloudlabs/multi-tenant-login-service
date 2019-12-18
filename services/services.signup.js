@@ -44,27 +44,6 @@ module.exports = () => {
                         resolve("FID");
                     } else {
 
-                        
-
-                        if (user_type == "admin") {
-                            const role = await Role.findOne({ role: "king" }, { _id: 1 })
-                            // Declare a constant response_user that will be the new user to be added and sent as a response
-                            const responseUser = new User({
-                                user_id,
-                                email,
-                                password,
-                                user_type,
-                                subscribed_service,
-                                role,
-                            });
-
-                            await responseUser.save();
-                            tenant_db.disconnect()
-                            resolve("UC");
-                            logger.info(
-                                "Successfully Created User! "
-                            );
-                        } else {
                             const role = await Role.findOne({ role: "subject" }, { _id: 1 })
                             // Declare a constant response_user that will be the new user to be added and sent as a response
                             const responseUser = new User({
@@ -82,9 +61,6 @@ module.exports = () => {
                             logger.info(
                                 "Successfully Created User! "
                             );
-                        }
-
-
                     }
 
                 } else {
