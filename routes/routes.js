@@ -35,10 +35,8 @@ module.exports = ({
 
     router
     .route('/member')
-    .post((req, res, next) => memberController.addMember(req, res, next, {
-      logger,
-      db,
-    }));
+    .post((req, res, next) => memberController.addMember(req, res, next, {logger,db,}))
+    .get((req, res, next) => memberController.getMember(req, res, next, {logger,db,}))
 
     /**
      * Roles APIs.

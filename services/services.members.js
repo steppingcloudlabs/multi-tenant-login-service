@@ -86,7 +86,31 @@ module.exports = () => {
             }
         });
 
+        
+        const getMember = (payload, logger) => new Promise(async (resolve, reject) => {
+            try {
+                const { user_type, company_id, master_username, master_password } = payload
+
+                // connect with tenant database for getting database credentials.
+                const tenant_db = await Tenantutil.multi_tenant_db_connector(config.db_host, config.db_port, company_id, master_username, master_password, logger);
+                const result  = await User.find({ user_type })
+                tenant_db.disconnect();
+                
+                //
+                if(result.length != 0) {
+                   resolve(result) 
+                } else {
+                    resolve('NF')
+                }
+    
+            } catch (error) {
+                reject(error)
+    
+            }
+        })
+
     return {
-        addMember
+        addMember,
+        getMember
     };
 };

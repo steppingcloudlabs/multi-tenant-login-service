@@ -20,11 +20,11 @@ module.exports = () => {
                 properties: {
                     user_id: { type: "string" },
                     email: { type: "string", format: "email" },
-                    first_name: {type: "string"},
-                    last_name: {type: "string"},
+                    first_name: { type: "string" },
+                    last_name: { type: "string" },
                     password: { type: "string" },
                     user_type: { type: "string" },
-                    subscribed_service: { type: "string" },
+                    subscribed_service: [{ type: "string" }],
                     company_id: { type: "string" },
                     master_username: { type: "string" },
                     master_password: { type: "string" }
@@ -38,7 +38,7 @@ module.exports = () => {
                 "/addMemberSchema"
             ).valid;
 
-            if(validatorResponse) {
+            if (validatorResponse) {
                 const response = await MemberService.addMember(payload, logger, db);
                 if (response == "FE") {
                     res.status(200).send({
@@ -77,7 +77,63 @@ module.exports = () => {
                     }
                 });
             }
-            
+
+        } catch (error) {
+            res.status(200).send({
+                status: '400',
+                result: error
+            })
+        }
+    }
+
+    const getMember = async (req, res, next, { logger, db }) => {
+        try {
+            const payload = req.body
+
+            /**
+             * Post body validation
+             */
+
+            //Creating a schema to test the post body against
+            const getMemberSchema = {
+                id: "/getMemberSchema",
+                type: "object",
+                properties: {
+                    user_type: { type: "string" },
+                },
+                required: ["user_type"]
+            };
+
+            validatator.addSchema(getMemberSchema, "/getMemberSchema");
+            const validatorResponse = validatator.validate(
+                payload,
+                "/getMemberSchema"
+            ).valid;
+
+            if (validatorResponse) {
+                const response = await MemberService.getMember(payload, logger)
+                if (response == 'NF') {
+                    res.status(200).send({
+                        status: '400',
+                        result: "No members found"
+                    })
+                }
+                else {
+                    res.status(200).send({
+                        status: '200',
+                        result: response
+                    })
+                }
+            } else {
+                res.status(200).send({
+                    status: "400",
+                    result: "Not a valid JSON, checkout help for json schema ",
+                    help: {
+                        user_id: '123546',
+                    }
+                });
+            }
+
         } catch (error) {
             res.status(200).send({
                 status: '400',
@@ -87,6 +143,7 @@ module.exports = () => {
     }
 
     return {
-        addMember
+        addMember,
+        getMember
     }
 }
