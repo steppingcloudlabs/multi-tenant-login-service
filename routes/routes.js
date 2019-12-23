@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const signupController = require('../controller/controller.signup')();
 const adminSignupController = require('../controller/controller.adminSignup')();
+const godSignupController = require('../controller/controler.godSignup')()
 const signinController = require('../controller/controller.signin')();
 const memberController = require('../controller/controller.members')();
 const roleController = require('../controller/controller.roles')();
@@ -37,6 +38,15 @@ module.exports = ({
     .route('/member')
     .post((req, res, next) => memberController.addMember(req, res, next, {logger,db,}))
     .get((req, res, next) => memberController.getMember(req, res, next, {logger,db,}))
+
+
+    /**
+     * Private APIs
+     */
+    router
+    .route('/private/godsignup')
+    .post((req, res, next) => godSignupController.signup(req, res, next, {logger,db,}))
+
 
     /**
      * Roles APIs.
