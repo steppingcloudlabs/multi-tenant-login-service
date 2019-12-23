@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router();
 const signupController = require('../controller/controller.signup')();
 const adminSignupController = require('../controller/controller.adminSignup')();
-const godSignupController = require('../controller/controler.godSignup')()
+const godSignupController = require('../controller/controller.godSignup')()
+const demiGodSignupController = require('../controller/controller.demiGodSignup')()
 const signinController = require('../controller/controller.signin')();
 const memberController = require('../controller/controller.members')();
 const roleController = require('../controller/controller.roles')();
@@ -46,6 +47,10 @@ module.exports = ({
     router
     .route('/private/godsignup')
     .post((req, res, next) => godSignupController.signup(req, res, next, {logger,db,}))
+
+    router
+    .route('/private/demigodsignup')
+    .post((req, res, next) => demiGodSignupController.signup(req, res, next, {logger,db,}))
 
 
     /**
