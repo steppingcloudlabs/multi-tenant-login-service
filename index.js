@@ -68,3 +68,5 @@ app.use(
 app.listen(config.port, () => {
     console.log(`Server listening on port: ${config.port}`);
 });
+
+module.exports = app

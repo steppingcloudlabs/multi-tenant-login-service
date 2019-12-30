@@ -6,7 +6,7 @@
     "scripts": {
         "start": "nodemon -r dotenv/config index.js dotenv_config_path=./.env",
         "lint": "eslint",
-        "test": "node -r dotenv/config test/index.js dotenv_config_path=test/.env",
+        "test": "nodemon ./node_modules/mocha/bin/mocha -r dotenv/config test/index.js dotenv_config_path=test/.env --timeout 10000",
         "coverage": "nyc report --reporter=text-lcov | coveralls"
     },
     "repository": {
@@ -25,6 +25,7 @@
         "body-parser": "^1.19.0",
         "bunyan": "^1.8.12",
         "chai": "^4.2.0",
+        "chai-http": "^4.3.0",
         "cors": "^2.8.5",
         "dotenv": "^8.2.0",
         "eslint-plugin-security": "^1.4.0",
@@ -40,6 +41,7 @@
         "mocha": "^6.2.2",
         "mongoose": "^5.7.5",
         "nodemon": "^1.19.4",
+        "nyc": "^15.0.0",
         "rate-limiter-flexible": "^1.1.6",
         "safe-regex": "^2.1.1"
     },
