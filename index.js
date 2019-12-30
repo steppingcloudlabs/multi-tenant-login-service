@@ -1,6 +1,5 @@
 const dotenv = require('dotenv');
 
-dotenv.config();
 // Body Parser for req/res
 const bodyParser = require('body-parser');
 

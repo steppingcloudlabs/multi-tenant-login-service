@@ -4,9 +4,9 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "nodemon index.js",
+        "start": "nodemon -r dotenv/config index.js dotenv_config_path=./.env",
         "lint": "eslint",
-        "test": "nyc mocha --timeout=3000",
+        "test": "node -r dotenv/config test/index.js dotenv_config_path=test/.env",
         "coverage": "nyc report --reporter=text-lcov | coveralls"
     },
     "repository": {
@@ -44,6 +44,7 @@
         "safe-regex": "^2.1.1"
     },
     "devDependencies": {
+        "cross-env": "^6.0.3",
         "eslint": "^6.6.0",
         "eslint-config-airbnb-base": "^14.0.0",
         "eslint-plugin-import": "^2.18.2"
