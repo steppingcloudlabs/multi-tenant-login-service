@@ -19,7 +19,7 @@ chai.use(chaiHttp)
 //Dummy Data
 const dummyValidUser = {
     "user_id": "1759733",
-    "email": "shankar@gmail.com",
+    "email": "babuJelela@gmail.com",
     "password": "masaomikida",  
     "subscribed_service": "chatbox",
     "company_id": "testTenantT1",
@@ -37,6 +37,7 @@ describe('User Signup', () => {
                 .end((err, res) => {
                     res.should.have.status(200);
                     res.body.should.be.a('object');
+                    console.log(res.body)
                     done()
                 })
         })
