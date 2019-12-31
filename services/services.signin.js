@@ -3,6 +3,7 @@ const JWT = require('jsonwebtoken');
 const Tenantutil = require("../util/index")();
 const config = require("../config/index")
 const User = require("../model/loginSchema");
+const role = require('../model/role')
 
 module.exports = () => {
     /**
@@ -21,7 +22,7 @@ module.exports = () => {
 
 
             //Check to see if user is present in the database
-            response = await User.findOne({ email });
+            response = await User.findOne({ email })
 
             if (response) {
                 //Check the password of the user

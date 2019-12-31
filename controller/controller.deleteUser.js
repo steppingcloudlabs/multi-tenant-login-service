@@ -3,8 +3,7 @@
     const JsonValidator = require("jsonschema").Validator;
     const validatator = new JsonValidator();
 
-    const signinService = require("../services/services.signin")()
-    const tenant = require("../util/index")
+    const deleteUserService = require("../services/services.deleteUser")()
 
     module.exports = () => {
         /**
@@ -14,7 +13,7 @@
      * @param {} next
      * @param {} param3
      */
-        const signin = async (req, res, next, {logger, db}) => {
+        const deleteUser = async (req, res, next, {logger, db}) => {
             try{
                 const payload = req.body;
              /**
@@ -22,46 +21,42 @@
              */
 
             //Creating a schema to test the post body against
-            const signinUserSchema = {
-                id: "/signinUserSchema",
+            const deleteUserSchema = {
+                id: "/deleteUserSchema",
                 type: "object",
                 properties: {
                     
                     email: { type: "string", format: "email" },
-                    password: { type: "string" },
                     company_id: { type: "string" },
                     master_username: { type: "string" },
-                    master_password: { type: "string"}
+                    master_password: { type: "string"},
+                    token: {type: "string"},
+                    role: {type: "string"}
                 },
-                required: ["email", "password", "company_id", "master_username", "master_password"  ]
+                required: ["email", "company_id", "master_username", "master_password", "token", "role"  ]
             };
 
-            validatator.addSchema(signinUserSchema, "/signinUserSchema");
+            validatator.addSchema(deleteUserSchema, "/deleteUserSchema");
             const validatorResponse = validatator.validate(
                 payload,
-                "/signinUserSchema"
+                "/deleteUserSchema"
             ).valid;
 
             if (validatorResponse) {
-               const response= await signinService.signin(payload,logger,db)
+               const response= await deleteUserService.deleteUser(payload,logger,db)
                
-                    if(response.token) {
+               if(response == "DU") {
+                   res.status(200).send({
+                       "status": "200 OK",
+                       "message": `User with email ${payload.email} has been deleted`
+                   }) 
+               } else if(response == "NF") {
                     res.status(200).send({
-                        status: '200 ok',
-                        result: {
-                            _id: response._id,
-                            email: response.email,
-                            user_type: response.user_type,
-                            role: response.role,
-                        },
-                        token: response.token,
-                    })
-                } else {
-                    res.status(200).send({
-                        status: '400',
-                        result: 'Invalid username or password'
-                })
-                }
+                        "status": "400",
+                        "message": `User with email ${payload.email} not found`
+                    })    
+               }
+
             } else {
                 res.status(200).send({
                     status: '400',
@@ -77,6 +72,6 @@
             }
         }
         return {
-            signin,
+            deleteUser,
         }
     }

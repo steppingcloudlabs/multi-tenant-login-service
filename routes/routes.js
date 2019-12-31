@@ -9,6 +9,7 @@ const signinController = require('../controller/controller.signin')();
 const memberController = require('../controller/controller.members')();
 const roleController = require('../controller/controller.roles')();
 const getController = require('../controller/controller.getEverything')()
+const deleteUserController = require('../controller/controller.deleteUser')()
 
 module.exports = ({
   logger,
@@ -40,6 +41,13 @@ module.exports = ({
     .post((req, res, next) => memberController.addMember(req, res, next, {logger,db,}))
     .get((req, res, next) => memberController.getMember(req, res, next, {logger,db,}))
 
+
+    router
+    .route('/delete/user')
+    .delete((req, res, next) => deleteUserController.deleteUser(req, res, next, {
+      logger,
+      db,
+    }));
 
     /**
      * Private APIs
